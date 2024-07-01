@@ -1,118 +1,51 @@
-# Welcome to Chainlit by Literal AI 👋
-
-[![](https://dcbadge.vercel.app/api/server/ZThrUxbAYw?style=flat)](https://discord.gg/k73SQ3FyUh)
-[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/chainlit_io.svg?style=social&label=Follow%20%40chainlit_io)](https://twitter.com/chainlit_io)
-![PyPI - Downloads](https://img.shields.io/pypi/dm/chainlit)
-[![GitHub Contributors](https://img.shields.io/github/contributors/chainlit/chainlit)](https://github.com/chainlit/chainlit/graphs/contributors)
-[![CI](https://github.com/Chainlit/chainlit/actions/workflows/ci.yaml/badge.svg)](https://github.com/Chainlit/chainlit/actions/workflows/ci.yaml)
-
-**Build production-ready Conversational AI applications in minutes, not weeks ⚡️**
-
-Chainlit is an open-source async Python framework which allows developers to build scalable Conversational AI or agentic applications.
-
-- ✅ ChatGPT-like application
-- ✅ Embedded Chatbot & Software Copilot
-- ✅ Slack & Discord
-- ✅ Custom frontend (build your own agentic experience)
-- ✅ API Endpoint
-
-Full documentation is available [here](https://docs.chainlit.io). You can ask Chainlit related questions to [Chainlit Help](https://help.chainlit.io/), an app built using Chainlit!
-
-> [!NOTE]  
-> Contact us [here](https://forms.gle/BX3UNBLmTF75KgZVA) for **Enterprise Support**.
-> Check out [Literal AI](https://literalai.com), our product to monitor and evaluate LLM applications! It works with any Python or TypeScript applications and [seamlessly](https://docs.chainlit.io/data-persistence/overview) with Chainlit by adding a `LITERAL_API_KEY` in your project.
-
-<p align="center">
-    <img src="https://github.com/Chainlit/chainlit/assets/13104895/0c2cc7a9-766c-41d3-aae2-117a2d0eb8ed" width="80%" />
-</p>
-
 ## Installation
 
 Open a terminal and run:
 
 ```bash
 $ pip install chainlit
-$ chainlit hello
 ```
 
-If this opens the `hello app` in your browser, you're all set!
-
-## 🚀 Quickstart
-
-### 🐍 Pure Python
-
-Create a new file `demo.py` with the following code:
-
-```python
-import chainlit as cl
-
-
-@cl.step(type="tool")
-async def tool():
-    # Fake tool
-    await cl.sleep(2)
-    return "Response from the tool!"
-
-
-@cl.on_message  # this function will be called every time a user inputs a message in the UI
-async def main(message: cl.Message):
-    """
-    This function is called every time a user inputs a message in the UI.
-    It sends back an intermediate response from the tool, followed by the final answer.
-
-    Args:
-        message: The user's message.
-
-    Returns:
-        None.
-    """
-
-    final_answer = await cl.Message(content="").send()
-
-    # Call the tool
-    final_answer.content = await tool()
-
-    await final_answer.update()
-```
-
-Now run it!
+Run application
 
 ```
 $ chainlit run demo.py -w
 ```
 
-<img src="/images/quick-start.png" alt="Quick Start"></img>
+## Add OAuth
+### Microsoft (Azure Entra ID / Azure Active Directory)
+1. Navigate to Azure Entra ID in Azure Portal. Make sure you opened the appropriate tenant. In this case, let's use Technological Institue of the Philippines as the tenant.
+2. Navigate to Manage > App Registrations.
+3. Click New Registration
+![New Registration](image.png)
+4. Fill out the details for application registration. Use single tenant to only allow users from the organization (e.g. TIP)
+![alt text](image-1.png)
+5. Additionally, set the redirect URI to `http://localhost:8000/auth/oauth/azure-ad/callback` and the type to `Web`.
+![alt text](image-2.png)
+6. After registration, take note of the `Application (client) ID` and the `Directory (tenant) ID`. This will be used for the environment variables required to support authentication using Microsoft.
+![alt text](image-4.png)
+7. Navigate to Manage > Certificates & Secrets (while in your app registration), and create a new client secret. Give it a description and expiration. This will be used as an environment variable as well.
+8. Finally, create a `.env` file for and add the following environment variables:
+```
+OAUTH_AZURE_AD_CLIENT_ID=your client id
+OAUTH_AZURE_AD_CLIENT_SECRET=your client secrent
+OAUTH_AZURE_AD_TENANT_ID=your tenant id
+OAUTH_AZURE_AD_ENABLE_SINGLE_TENANT=true
+```
 
-## 🎉 Key Features and Integrations
-
-Full documentation is available [here](https://docs.chainlit.io). Key features:
-
-- [💬 Multi Modal chats](https://docs.chainlit.io/advanced-features/multi-modal)
-- [💭 Chain of Thought visualisation](https://docs.chainlit.io/concepts/step)
-- [💾 Data persistence + human feedback](https://docs.chainlit.io/data-persistence/overview)
-- [🐛 Debug Mode](https://docs.chainlit.io/data-persistence/enterprise#debug-mode)
-- [👤 Authentication](https://docs.chainlit.io/authentication/overview)
-
-Chainlit is compatible with all Python programs and libraries. That being said, it comes with integrations for:
-
-- [LangChain](https://docs.chainlit.io/integrations/langchain)
-- [Llama Index](https://docs.chainlit.io/integrations/llama-index)
-- [Autogen](https://github.com/Chainlit/cookbook/tree/main/pyautogen)
-- [OpenAI Assistant](https://github.com/Chainlit/cookbook/tree/main/openai-assistant)
-- [Haystack](https://docs.chainlit.io/integrations/haystack)
-
-## 📚 More Examples - Cookbook
-
-You can find various examples of Chainlit apps [here](https://github.com/Chainlit/cookbook) that leverage tools and services such as OpenAI, Anthropiс, LangChain, LlamaIndex, ChromaDB, Pinecone and more.
-
-Tell us what you would like to see added in Chainlit using the Github issues or on [Discord](https://discord.gg/k73SQ3FyUh).
-
-## 💁 Contributing
-
-As an open-source initiative in a rapidly evolving domain, we welcome contributions, be it through the addition of new features or the improvement of documentation.
-
-For detailed information on how to contribute, see [here](.github/CONTRIBUTING.md).
-
-## 📃 License
-
-Chainlit is open-source and licensed under the [Apache 2.0](LICENSE) license.
+### Google Cloud Platform
+1. Navigate to https://console.developers.google.com/apis/credentials to create credentials for OAuth.
+2. Click on Create Credentials > OAuth Client ID.
+3. Select Web Application as the application type.
+4. Add `http://localhost:8000/auth/oauth/google/callback` as an Authorized redirect URI and click create:
+![alt text](image-5.png)
+5. After creating your credentials, take note of the `Client ID` and `Client Secret` to be used for the environment variables to enable Google login.
+![alt text](image-6.png)
+6. Don't forget to setup your OAuth consent screen. Just follow the steps.
+7. Finally, add the following to your environment variables:
+```
+OAUTH_GOOGLE_CLIENT_ID=your client id
+OAUTH_GOOGLE_CLIENT_SECRET=your client secret
+```
+Result
+![alt text](image-7.png)
