@@ -12,6 +12,16 @@ Run application
 $ chainlit run demo.py -w
 ```
 
+## Add openapi api key and auth secret
+Add to .env
+```
+OPENAI_API_KEY=your api key
+```
+Also, generate the auth secret
+```
+chainlit create-secret
+```
+
 ## Add OAuth
 ### Microsoft (Azure Entra ID / Azure Active Directory)
 1. Navigate to Azure Entra ID in Azure Portal. Make sure you opened the appropriate tenant. In this case, let's use Technological Institue of the Philippines as the tenant.
