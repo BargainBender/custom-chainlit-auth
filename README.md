@@ -6,12 +6,6 @@ Open a terminal and run:
 $ pip install chainlit
 ```
 
-Run application
-
-```
-$ chainlit run demo.py -w
-```
-
 ## Add openapi api key and auth secret
 Add to .env
 ```
@@ -57,5 +51,29 @@ OAUTH_AZURE_AD_ENABLE_SINGLE_TENANT=true
 OAUTH_GOOGLE_CLIENT_ID=your client id
 OAUTH_GOOGLE_CLIENT_SECRET=your client secret
 ```
-Result
+
+## .env example
+Included in this repository is the example of the environment file (`.env`), containing the needed environment variables. See `.env.example`:
+```
+OPENAI_API_KEY=
+CHAINLIT_AUTH_SECRET=
+
+OAUTH_AZURE_AD_CLIENT_ID=
+OAUTH_AZURE_AD_CLIENT_SECRET=
+OAUTH_AZURE_AD_TENANT_ID=
+OAUTH_AZURE_AD_ENABLE_SINGLE_TENANT=
+
+OAUTH_GOOGLE_CLIENT_ID=
+OAUTH_GOOGLE_CLIENT_SECRET=
+```
+
+## Running the application
+To run the application, run the following command:
+
+```
+$ chainlit run app.py -w
+```
+The application will be available at http://localhost:8000
+
+Result:
 ![alt text](image-7.png)
